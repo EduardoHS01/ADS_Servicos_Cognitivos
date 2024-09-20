@@ -104,14 +104,15 @@ class Robo:
                 elif orientacao == 'O':  # Oeste
                     self.posicao = [posicao[0], posicao[1] - 1]  # Move para a esquerda (decrementa o X)
                 render(matriz,self.posicao,self.simbolo)
-            elif(verificar_sensor_frontal() == "H"):
+            elif(verificar_sensor_frontal(posicao,orientacao) == "H"):
                 print("HUMANO A FRENTE")
                 pegarHumano()
-            elif(verificar_sensor_frontal() == "E" and self.comHumano == True):
+            elif(verificar_sensor_frontal(posicao,orientacao) == "E" and self.comHumano == True):
                 print("ENTRADA A FRENTE")
                 ejetarHumano()
             else:
-                print("PAREDE A FRENTE")        def calcularRota():
+                print("PAREDE A FRENTE")
+        def calcularRota():
             rota_saida = self.caminho[::-1]  # Reverte a lista
             for indice in rota_saida:
                 if isinstance(indice, list):  # Verifica se indice é uma lista
@@ -122,6 +123,10 @@ class Robo:
                     indice = (indice % 4)   # Aplica a operação
                     for i in range(indice):
                         girarDireita()  
+        def pegarHumano():
+            pass
+        def ejetarHumano():
+            pass
 
         # Exemplo de uso:
         verificarOrientacao()
