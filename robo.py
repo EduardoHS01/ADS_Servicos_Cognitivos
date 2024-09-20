@@ -7,7 +7,8 @@ class Robo:
         self.mapa = mapa
 
         self.entrada = []
-
+        self.dadosSensorFrontal = []
+        self.comHumano=False
         self.caminho = []
 
         self.orientacao=""
@@ -48,6 +49,25 @@ class Robo:
                     file.write(''.join(linha))  # Converte a lista de volta para string
                     file.write('\n')  # Adiciona a nova linha após escrever a linha atual
             verificarOrientacao()
+        def verificar_sensor_frontal(posicao,orientacao):
+            dadoSensorFrontal=""
+            if(orientacao == "S"):
+                dadoSensorFrontal = matriz[posicao[0]+1][posicao[1]]
+            elif(orientacao == "O"):
+                dadoSensorFrontal = matriz[posicao[0]][posicao[1]-1]
+            elif(orientacao == "N"):
+                dadoSensorFrontal = matriz[posicao[0]-1][posicao[1]]
+            elif(orientacao == "L"):
+                dadoSensorFrontal = matriz[posicao[0]][posicao[1]+1]
+            if(dadoSensorFrontal =="*"):
+                self.dadosSensorFrontal.append("PAREDE")
+            elif(dadoSensorFrontal == "H"):
+                self.dadosSensorFrontal.append("HUMANO")
+            elif(dadoSensorFrontal == "E"):
+                self.dadosSensorFrontal.append("ENTRADA")
+            elif(dadoSensorFrontal == " "):
+                self.dadosSensorFrontal.append("VAZIO")
+            return dadoSensorFrontal
         def girarDireita():
             direcoes =['S','O','N','L']
             direcao_atual = self.orientacao
@@ -72,18 +92,26 @@ class Robo:
             self.posicao = posicao
             self.caminho.append(posicao)
             verificarOrientacao()
-            render(matriz,self.posicao,"")
-            # Atualiza a posição com base na orientação
-            if orientacao == 'S':  # Sul
-                self.posicao = [posicao[0]+1, posicao[1]]  # Move para baixo (incrementa o Y)
-            elif orientacao == 'N':  # Norte
-                self.posicao = [posicao[0] - 1, posicao[1]]  # Move para cima (decrementa o Y)
-            elif orientacao == 'L':  # Leste
-                self.posicao = [posicao[0], posicao[1] + 1]  # Move para a direita (incrementa o X)
-            elif orientacao == 'O':  # Oeste
-                self.posicao = [posicao[0], posicao[1] - 1]  # Move para a esquerda (decrementa o X)
-            render(matriz,self.posicao,self.simbolo)
-        def calcularRota():
+            if verificar_sensor_frontal(posicao,orientacao) != "*":   
+                render(matriz,self.posicao,"")
+                # Atualiza a posição com base na orientação
+                if orientacao == 'S':  # Sul
+                    self.posicao = [posicao[0]+1, posicao[1]]  # Move para baixo (incrementa o Y)
+                elif orientacao == 'N':  # Norte
+                    self.posicao = [posicao[0] - 1, posicao[1]]  # Move para cima (decrementa o Y)
+                elif orientacao == 'L':  # Leste
+                    self.posicao = [posicao[0], posicao[1] + 1]  # Move para a direita (incrementa o X)
+                elif orientacao == 'O':  # Oeste
+                    self.posicao = [posicao[0], posicao[1] - 1]  # Move para a esquerda (decrementa o X)
+                render(matriz,self.posicao,self.simbolo)
+            elif(verificar_sensor_frontal() == "H"):
+                print("HUMANO A FRENTE")
+                pegarHumano()
+            elif(verificar_sensor_frontal() == "E" and self.comHumano == True):
+                print("ENTRADA A FRENTE")
+                ejetarHumano()
+            else:
+                print("PAREDE A FRENTE")        def calcularRota():
             rota_saida = self.caminho[::-1]  # Reverte a lista
             for indice in rota_saida:
                 if isinstance(indice, list):  # Verifica se indice é uma lista
@@ -94,7 +122,6 @@ class Robo:
                     indice = (indice % 4)   # Aplica a operação
                     for i in range(indice):
                         girarDireita()  
-
 
         # Exemplo de uso:
         verificarOrientacao()
