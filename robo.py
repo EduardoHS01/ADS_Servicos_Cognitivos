@@ -8,6 +8,8 @@ class Robo:
 
         self.entrada = []
         self.dadosSensorFrontal = []
+        self.dadosSensorDireito = []
+        self.dadosSensorEsquerdo = []
         self.comHumano=False
         self.caminho = []
 
@@ -68,6 +70,44 @@ class Robo:
             elif(dadoSensorFrontal == " "):
                 self.dadosSensorFrontal.append("VAZIO")
             return dadoSensorFrontal
+        def verificar_sensor_direito(posicao,orientacao):
+            dadoSensorDireito=""
+            if(orientacao == "S"):
+                dadoSensorDireito = matriz[posicao[0]][posicao[1]-1]
+            elif(orientacao == "O"):
+                dadoSensorDireito = matriz[posicao[0]-1][posicao[1]]
+            elif(orientacao == "N"):
+                dadoSensorDireito = matriz[posicao[0]][posicao[1]+1]
+            elif(orientacao == "L"):
+                dadoSensorDireito = matriz[posicao[0]+1][posicao[1]]
+            if(dadoSensorDireito =="*"):
+                self.dadosSensorDireito.append("PAREDE")
+            elif(dadoSensorDireito == "H"):
+                self.dadosSensorDireito.append("HUMANO")
+            elif(dadoSensorDireito == "E"):
+                self.dadosSensorDireito.append("ENTRADA")
+            elif(dadoSensorDireito == " "):
+                self.dadosSensorDireito.append("VAZIO")
+            return dadoSensorDireito
+        def verificar_sensor_esquerdo(posicao,orientacao):
+            dadoSensorEsquerdo=""
+            if(orientacao == "S"):
+                dadoSensorEsquerdo = matriz[posicao[0]][posicao[1]+1]
+            elif(orientacao == "O"):
+                dadoSensorEsquerdo = matriz[posicao[0]+1][posicao[1]]
+            elif(orientacao == "N"):
+                dadoSensorEsquerdo = matriz[posicao[0]][posicao[1]-1]
+            elif(orientacao == "L"):
+                dadoSensorEsquerdo = matriz[posicao[0]-1][posicao[1]]
+            if(dadoSensorEsquerdo =="*"):
+                self.dadosSensorEsquerdo.append("PAREDE")
+            elif(dadoSensorEsquerdo == "H"):
+                self.dadosSensorEsquerdo.append("HUMANO")
+            elif(dadoSensorEsquerdo == "E"):
+                self.dadosSensorEsquerdo.append("ENTRADA")
+            elif(dadoSensorEsquerdo == " "):
+                self.dadosSensorEsquerdo.append("VAZIO")
+            return dadoSensorEsquerdo
         def girarDireita():
             direcoes =['S','O','N','L']
             direcao_atual = self.orientacao
