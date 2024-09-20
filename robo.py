@@ -84,10 +84,16 @@ class Robo:
                 self.posicao = [posicao[0], posicao[1] - 1]  # Move para a esquerda (decrementa o X)
             render(matriz,self.posicao,self.simbolo)
         def calcularRota():
-                rota_saida = self.caminho.reverse()
-                for indice in rota_saida:
-                    if type(indice) == "List":
-                        render(matriz,indice,self.simbolo)     
+            rota_saida = self.caminho[::-1]  # Reverte a lista
+            for indice in rota_saida:
+                if isinstance(indice, list):  # Verifica se indice é uma lista
+                    pass  # Se for uma lista, não faz nada (ou adicione sua lógica aqui)
+                    render(matriz,indice,self.simbolo)
+                    sleep(2)
+                elif isinstance(indice, (int)):  # Verifica se é um número (int ou float)
+                    indice = (indice % 4)   # Aplica a operação
+                    for i in range(indice):
+                        girarDireita()  
 
 
         # Exemplo de uso:
